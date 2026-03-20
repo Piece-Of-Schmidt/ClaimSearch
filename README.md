@@ -1,4 +1,4 @@
-# NarrativLabel
+# ClaimSearch
 
 A lightweight, zero-dependency web app for annotating narratives and framing in text corpora — built for Computational Social Science (CSS) research.
 

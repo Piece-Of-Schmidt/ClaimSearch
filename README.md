@@ -4,7 +4,7 @@ A lightweight, zero-dependency web app for annotating narratives and framing in 
 
 Highlight any phrase in a text, assign one or more **narrative labels** to it, and export the result as structured JSON. Designed specifically for the manual annotation phase of the Context-Injected Span Matching (CISM) methodology.
 
-![NarrativLabel Screenshot](screenshot.jpg)
+![NarrativLabel Screenshot](images/screenshot.jpg)
 
 ---
 

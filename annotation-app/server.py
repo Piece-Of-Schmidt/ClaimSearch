@@ -11,8 +11,9 @@ from urllib.parse import unquote
 
 BASE     = Path(__file__).resolve().parent   # immer absoluter Pfad
 PUBLIC   = BASE / "public"
-ANN_FILE = BASE / "data" / "annotations.json"
-TXT_FILE = BASE / "data" / "texts.json"
+ANN_FILE        = BASE / "data" / "annotations.json"
+TXT_FILE        = BASE / "data" / "texts.json"
+TXT_SAMPLE_FILE = BASE / "data" / "texts_sample.json"
 
 def read_ann():
     try:
@@ -31,7 +32,8 @@ class Handler(SimpleHTTPRequestHandler):
     # ── routing ──────────────────────────────────────────────
     def do_GET(self):
         if self.path == "/api/texts":
-            self._json(json.loads(TXT_FILE.read_text(encoding="utf-8")))
+            src = TXT_FILE if TXT_FILE.exists() else TXT_SAMPLE_FILE
+            self._json(json.loads(src.read_text(encoding="utf-8")))
         elif self.path == "/api/annotations":
             self._json(read_ann())
         elif self.path == "/favicon.ico":
@@ -125,7 +127,9 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = 3000
     server = HTTPServer(("", port), Handler)  # alle Interfaces
-    print(f"\n  NarrativLabel laeuft auf  http://localhost:{port}\n")
+    txt_label = "texts.json" if TXT_FILE.exists() else "texts_sample.json  (kein texts.json gefunden)"
+    print(f"\n  NarrativLabel laeuft auf  http://localhost:{port}")
+    print(f"  Texte:                    {txt_label}\n")
     print("  Beenden mit Ctrl+C\n")
     try:
         server.serve_forever()

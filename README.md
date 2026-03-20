@@ -29,15 +29,12 @@ Highlight any phrase in a text, assign one or more **narrative labels** to it, a
 ```bash
 git clone https://github.com/YOUR_USERNAME/ClaimSearch.git
 cd ClaimSearch/annotation-app
-
-# Add your texts (see Data Format below)
-cp data/texts_sample.json data/texts.json
-
-# Start the server
 python -u server.py
 ```
 
 Then open **http://localhost:3000** in your browser.
+
+If no `data/texts.json` exists, the server automatically loads `data/texts_sample.json` so you can explore the app immediately. Replace it with your own data when ready (see [Data Format](#data-format) below).
 
 ---
 

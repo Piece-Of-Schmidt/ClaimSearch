@@ -1,0 +1,101 @@
+{
+  "0": {
+    "text": "Es ist schon wieder so typisch. Jens Spahn hat sich an den Maskendeals sehr bereichert, während normale Bürger kämpfen. Diese Politiker denken nur an sich selbst und nicht an das Wohl der Allgemeinheit.",
+    "spans": [
+      {
+        "span": "Jens Spahn hat sich an den Maskendeals sehr bereichert, während normale Bürger kämpfen. Diese Politiker denken nur an sich selbst und nicht an das Wohl der Allgemeinheit.",
+        "start": 32,
+        "end": 202,
+        "narratives": [
+          "Politker sind korrupt"
+        ]
+      },
+      {
+        "span": "Es ist schon wieder so typisch. Jens Spahn hat sich an den Maskendeals sehr bereichert, während normale Bürger kämpfen. Diese Politiker denken nur an sich selbst und nicht an das Wohl der Allgemeinheit.",
+        "start": 0,
+        "end": 202,
+        "narratives": [
+          "Die Welt geht vor die Hunde"
+        ]
+      }
+    ]
+  },
+  "1": {
+    "text": "Wieder mal beweist die EU, dass sie gegen die Interessen der deutschen Bürger arbeitet. Brüssel diktiert uns, was wir zu tun haben, und Merkel hat diesem Ausverkauf unserer Souveränität tatenlos zugeschaut. Deutschland zahlt und zahlt.",
+    "spans": [
+      {
+        "span": "Wieder mal beweist die EU, dass sie gegen die Interessen der deutschen Bürger arbeitet.",
+        "start": 0,
+        "end": 87,
+        "narratives": [
+          "Raumschiff Brüssel"
+        ]
+      },
+      {
+        "span": "Brüssel diktiert uns, was wir zu tun haben, und Merkel hat diesem Ausverkauf unserer Souveränität tatenlos zugeschaut. Deutschland zahlt und zahlt.",
+        "start": 88,
+        "end": 235,
+        "narratives": [
+          "Die Welt geht vor die Hunde",
+          "Raumschiff Brüssel"
+        ]
+      }
+    ]
+  },
+  "2": {
+    "text": "Die Medien berichten mal wieder einseitig. Niemand spricht darüber, wie viele Migranten Straftaten begehen. Die Mainstream-Medien verschweigen die Wahrheit, weil sie von der Politik gesteuert werden. Lügenpresse!",
+    "spans": [
+      {
+        "span": "Die Mainstream-Medien verschweigen die Wahrheit, weil sie von der Politik gesteuert",
+        "start": 108,
+        "end": 191,
+        "narratives": [
+          "Raumschiff Brüssel"
+        ]
+      },
+      {
+        "span": "e Medien berichten mal wieder einseitig. Niemand spricht darüber, wie viele Migranten Straftaten begehen. Die Mainstream-Medien verschweigen die Wahrheit, weil sie von der Politik gesteuert werde",
+        "start": 2,
+        "end": 197,
+        "narratives": [
+          "Politker sind korrupt",
+          "Die Welt geht vor die Hunde"
+        ]
+      },
+      {
+        "span": "Lügenpresse",
+        "start": 200,
+        "end": 211,
+        "narratives": [
+          "Die Welt geht vor die Hunde"
+        ]
+      }
+    ]
+  },
+  "3": {
+    "text": "Karl Lauterbach hat mit seinen realitätsfremden Corona-Maßnahmen die Wirtschaft ruiniert und die Grundrechte mit Füßen getreten. Ein Totalversagen der Ampelregierung von Anfang bis Ende.",
+    "spans": [
+      {
+        "span": "Karl Lauterbach hat mit seinen realitätsfremden Corona-Maßnahmen die Wirtschaft",
+        "start": 0,
+        "end": 79,
+        "narratives": [
+          "Wir werden alle sterben durch die Impfung"
+        ]
+      }
+    ]
+  },
+  "4": {
+    "text": "Deutschland hat die höchsten Energiepreise in Europa. Das ist das direkte Ergebnis der grünen Ideologie, die unsere Industrie mutwillig zerstört. Robert Habeck führt uns geradewegs in den Wirtschaftsruin – und lacht dabei noch.",
+    "spans": [
+      {
+        "span": "deologie, die unsere Industrie mutwillig zerstört. Robert Habeck führt uns geradewegs in den Wirtschaftsruin – und lacht dabe",
+        "start": 95,
+        "end": 220,
+        "narratives": [
+          "Wir werden alle sterben durch die Impfung"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+# ── Personal / IDE ──────────────────────────────────────
+.claude/
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# ── Real dataset & annotations (not for public repo) ───
+# Keep only the *_sample files; gitignore the real data.
+annotation-app/data/texts.json
+annotation-app/data/annotations.json
+annotation-app/data/annotations.json.bak
+
+# ── Stale Node.js artifacts (project uses Python) ───────
+annotation-app/server.js
+annotation-app/package.json
+annotation-app/package-lock.json
+annotation-app/node_modules/
+
+# ── Python ───────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ── Binary research files ────────────────────────────────
+Gemimi/*.pdf
+Gemimi/*.docx
+
+# ── OS ───────────────────────────────────────────────────
+*.log
+*.tmp
+
+# ── agents ───────────────────────────────────────────────
+Claude/
+Gemini/
+Claude.md

@@ -1,0 +1,149 @@
+# NarrativLabel
+
+A lightweight, zero-dependency web app for annotating narratives and framing in text corpora — built for Computational Social Science (CSS) research.
+
+Highlight any phrase in a text, assign one or more **narrative labels** to it, and export the result as structured JSON. Designed specifically for the manual annotation phase of the Context-Injected Span Matching (CISM) methodology.
+
+![screenshot placeholder](docs/screenshot.png)
+
+---
+
+## Features
+
+- **Span-level annotation** — select any substring, assign narratives, add an optional comment
+- **Click-to-delete** — click a highlighted span directly to open a popover with details and a delete button
+- **Stacked card UI** — active text prominent in the center; adjacent texts visible in the stack for context
+- **Left text-list panel** — scrollable list of all texts with live search (by ID, source, date, or content), annotation count badges, and click-to-jump navigation
+- **Right narrative sidebar** — grouped overview of all narratives with snippet counts, average span length, and inline rename (double-click)
+- **Multi-narrative support** — one span can carry multiple narrative labels
+- **Comment field** — optional free-text note per annotation (shown as 💬 in chips)
+- **JSON export** — one-click download of all annotations
+- **Zero dependencies** — pure Python 3 server (`http.server`), vanilla HTML/CSS/JS frontend
+
+---
+
+## Quick Start
+
+**Requirements:** Python 3.8+, a modern browser. No npm, no pip installs.
+
+```bash
+git clone https://github.com/YOUR_USERNAME/ClaimSearch.git
+cd ClaimSearch/annotation-app
+
+# Add your texts (see Data Format below)
+cp data/texts_sample.json data/texts.json
+
+# Start the server
+python -u server.py
+```
+
+Then open **http://localhost:3000** in your browser.
+
+---
+
+## Data Format
+
+### Input: `annotation-app/data/texts.json`
+
+A JSON array of text objects. Only `id` and `text` are required.
+
+```json
+[
+  {
+    "id": "A11653414",
+    "source": "SZ",
+    "date": "2025-01-15",
+    "text": "Der Volltext des Artikels oder Kommentars …"
+  }
+]
+```
+
+| Field    | Type   | Required | Description                          |
+|----------|--------|----------|--------------------------------------|
+| `id`     | string | ✅       | Unique identifier (used as JSON key) |
+| `text`   | string | ✅       | Full text to annotate                |
+| `source` | string | —        | Source label shown in the card header|
+| `date`   | string | —        | Date shown next to source            |
+
+See [`data/texts_sample.json`](annotation-app/data/texts_sample.json) for a working example with 10 texts.
+
+### Output: `annotation-app/data/annotations.json`
+
+Written automatically by the server after each annotation.
+
+```json
+{
+  "A11653414": {
+    "text": "Der Volltext …",
+    "spans": [
+      {
+        "span": "spielt unerfolgreichen Fußball",
+        "start": 42,
+        "end": 72,
+        "narratives": ["BVB in der Krise", "Trainer-Debatte"],
+        "comment": "Deutliche Wertung, kein neutraler Berichtsstil."
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Keyboard Shortcuts
+
+| Shortcut      | Action                  |
+|---------------|-------------------------|
+| `Ctrl + Enter`| Save annotation         |
+| `Escape`      | Close popup / popover   |
+| `Enter`       | Add new narrative (in popup input) |
+
+---
+
+## Project Structure
+
+```
+ClaimSearch/
+├── annotation-app/
+│   ├── server.py              # Python HTTP server (no dependencies)
+│   ├── public/
+│   │   ├── index.html         # Single-page app
+│   │   ├── style.css          # All styles
+│   │   └── app.js             # All frontend logic
+│   └── data/
+│       ├── texts_sample.json        # Example input (10 texts)
+│       ├── annotations_sample.json  # Example output
+│       ├── texts.json               # ← your real data (gitignored)
+│       └── annotations.json         # ← written at runtime (gitignored)
+└── .gitignore
+```
+
+---
+
+## Research Context
+
+NarrativLabel is the annotation frontend for **Context-Injected Span Matching (CISM)**, a novel NLP architecture for detecting and extracting narrative framing in text corpora. Unlike document-level classifiers, CISM produces token-span level evidence — the exact phrases that "fire" a given narrative.
+
+The annotated spans produced by this tool serve as:
+- **Gold standard** for training and evaluating the CISM model
+- **Qualitative evidence** for CSS research papers
+
+---
+
+## API
+
+The server exposes a minimal REST API on `localhost:3000`:
+
+| Method   | Path                                      | Description              |
+|----------|-------------------------------------------|--------------------------|
+| `GET`    | `/api/texts`                              | Load all texts           |
+| `GET`    | `/api/annotations`                        | Load all annotations     |
+| `POST`   | `/api/annotations`                        | Save a new span          |
+| `DELETE` | `/api/annotations/:textId/spans/:index`   | Delete a span by index   |
+| `POST`   | `/api/rename-narrative`                   | Rename a narrative globally |
+
+---
+
+## License
+
+MIT — feel free to adapt for your own annotation projects.

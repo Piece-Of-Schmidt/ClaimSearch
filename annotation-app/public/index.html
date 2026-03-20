@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NarrativLabel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────── -->
+  <header>
+    <span class="logo">NarrativLabel</span>
+
+    <div class="header-center">
+      <div class="progress-wrap">
+        <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-text" id="progressText">0 / 0</span>
+      </div>
+    </div>
+
+    <button class="btn-ghost" id="btnExport">↓ JSON exportieren</button>
+  </header>
+
+  <!-- ── Main: Text-Liste (ganz links) + Card-Stack (mitte) + Sidebar (rechts) ─── -->
+  <main>
+    <!-- Ganz links: Text-Liste -->
+    <aside class="text-list-panel" id="textListPanel">
+      <div class="tl-header">
+        <span class="tl-title">Alle Texte</span>
+        <input class="tl-search" id="tlSearch" type="search" placeholder="Suchen …" />
+      </div>
+      <div class="tl-body" id="tlBody"></div>
+    </aside>
+
+    <!-- Mitte: Karten -->
+    <div class="main-left">
+      <div class="card-stack" id="cardStack"></div>
+
+      <!-- Pause-Overlay -->
+      <div class="pause-overlay" id="pauseOverlay" style="display:none">
+        <div class="pause-box">
+          <div class="pause-icon">&#9632;</div>
+          <h2>Sitzung gestoppt</h2>
+          <p>Alle Annotationen wurden gespeichert.<br>Du kannst jederzeit weitermachen.</p>
+          <button class="btn-primary" id="btnResume">&#9654; Weiter annotieren</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rechte Seite: Narrative-Übersicht -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">Narrative-Übersicht</span>
+        <span class="sidebar-summary" id="sidebarSummary"></span>
+      </div>
+      <div class="sidebar-body" id="sidebarBody">
+        <p class="sidebar-empty">Noch keine Annotationen vorhanden.</p>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ── Overlay ───────────────────────────────────────── -->
+  <div class="overlay" id="overlay" hidden></div>
+
+  <!-- ── Popup ─────────────────────────────────────────── -->
+  <div class="popup" id="popup" hidden>
+    <div class="popup-header">
+      <h3>Narrativ annotieren</h3>
+      <button class="icon-btn" id="btnClosePopup">✕</button>
+    </div>
+
+    <div class="selected-preview" id="selectedPreview"></div>
+
+    <section class="popup-section">
+      <label class="section-label">Neues Narrativ eingeben</label>
+      <div class="input-row">
+        <input type="text" id="newNarrativeInput" placeholder="z.B. Politiker bereichern sich …" />
+        <button class="btn-icon-accent" id="btnAddNarrative" title="Hinzufügen (Enter)">+</button>
+      </div>
+    </section>
+
+    <section class="popup-section">
+      <label class="section-label">
+        Bekannte Narrative
+        <span class="label-hint">Mehrfachauswahl möglich</span>
+      </label>
+      <div class="narrative-list" id="narrativeList"></div>
+    </section>
+
+    <section class="popup-section">
+      <label class="section-label">
+        Kommentar
+        <span class="label-hint">optional</span>
+      </label>
+      <textarea class="comment-textarea" id="commentInput" placeholder="Notizen zu dieser Annotation …"></textarea>
+    </section>
+
+    <div class="popup-footer">
+      <button class="btn-ghost" id="btnCancelPopup">Abbrechen</button>
+      <button class="btn-primary" id="btnSave">Speichern <kbd>Ctrl+↵</kbd></button>
+    </div>
+  </div>
+
+  <!-- ── Span-Popover (erscheint beim Klick auf markierten Text) ── -->
+  <div class="span-popover" id="spanPopover" style="display:none">
+    <div class="sp-span-text" id="spSpanText"></div>
+    <div class="sp-narratives" id="spNarratives"></div>
+    <div class="sp-comment" id="spComment" style="display:none"></div>
+    <button class="sp-delete-btn" id="spDeleteBtn">✕ Annotation löschen</button>
+  </div>
+
+  <!-- ── Toast ─────────────────────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # ClaimSearch
 
-A lightweight, zero-dependency web app for annotating narratives and framing in text corpora — built for Computational Social Science (CSS) research.
+A lightweight, zero-dependency web app for annotating narratives and framing in text corpora.
 
-Highlight any phrase in a text, assign one or more **narrative labels** to it, and export the result as structured JSON. Designed specifically for the manual annotation phase of the Context-Injected Span Matching (CISM) methodology.
+Highlight any phrase in a text, assign one or more **narrative labels** to it, and export the result as structured JSON.
 
 ![NarrativLabel Screenshot](images/screenshot.jpg)
 
@@ -71,14 +71,14 @@ Written automatically by the server after each annotation.
 ```json
 {
   "A11653414": {
-    "text": "Der Volltext …",
+    "text": "... full text ...",
     "spans": [
       {
-        "span": "spielt unerfolgreichen Fußball",
+        "span": "hasn't won any matches in the last three months",
         "start": 42,
         "end": 72,
-        "narratives": ["BVB in der Krise", "Trainer-Debatte"],
-        "comment": "Deutliche Wertung, kein neutraler Berichtsstil."
+        "narratives": ["club experiencing crisis", "..."],
+        "comment": "..."
       }
     ]
   }
@@ -114,16 +114,6 @@ ClaimSearch/
 │       └── annotations.json         # ← written at runtime (gitignored)
 └── .gitignore
 ```
-
----
-
-## Research Context
-
-NarrativLabel is the annotation frontend for **Context-Injected Span Matching (CISM)**, a novel NLP architecture for detecting and extracting narrative framing in text corpora. Unlike document-level classifiers, CISM produces token-span level evidence — the exact phrases that "fire" a given narrative.
-
-The annotated spans produced by this tool serve as:
-- **Gold standard** for training and evaluating the CISM model
-- **Qualitative evidence** for CSS research papers
 
 ---
 

@@ -133,4 +133,4 @@ The server exposes a minimal REST API on `localhost:3000`:
 
 ## License
 
-MIT — feel free to adapt for your own annotation projects.
+MIT; feel free to adapt for your own annotation projects.

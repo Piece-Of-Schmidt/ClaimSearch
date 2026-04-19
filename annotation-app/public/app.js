@@ -18,13 +18,22 @@ function textId(idx)   { return String(texts[idx]?.id ?? idx); }
 function getSpans(idx) { return annotations[textId(idx)]?.spans ?? []; }
 
 // ─────────────────────────────────────────────────────────
+// localStorage persistence
+// ─────────────────────────────────────────────────────────
+function loadAnnotations() {
+  try { return JSON.parse(localStorage.getItem('narrativ_annotations') || '{}'); }
+  catch { return {}; }
+}
+function saveAnnotations(data) {
+  localStorage.setItem('narrativ_annotations', JSON.stringify(data));
+}
+
+// ─────────────────────────────────────────────────────────
 // Bootstrap
 // ─────────────────────────────────────────────────────────
 async function boot() {
-  [texts, annotations] = await Promise.all([
-    fetch('/api/texts').then(r => r.json()),
-    fetch('/api/annotations').then(r => r.json()),
-  ]);
+  texts       = await fetch('/texts.json').then(r => r.json());
+  annotations = loadAnnotations();
   narrativePool = collectNarratives(annotations);
   buildTextList();
   bindListeners();
@@ -498,12 +507,12 @@ function startRename(nameEl, oldName) {
 
   let committed = false;
 
-  const commit = async () => {
+  const commit = () => {
     if (committed) return;
     committed = true;
     const newName = input.value.trim();
     if (newName && newName !== oldName) {
-      await renameNarrative(oldName, newName);
+      renameNarrative(oldName, newName);
     } else {
       input.replaceWith(nameEl);
     }
@@ -516,15 +525,13 @@ function startRename(nameEl, oldName) {
   });
 }
 
-async function renameNarrative(oldName, newName) {
-  const res = await fetch('/api/rename-narrative', {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify({ oldName, newName }),
+function renameNarrative(oldName, newName) {
+  Object.values(annotations).forEach(entry => {
+    (entry.spans ?? []).forEach(sp => {
+      if (sp.narratives) sp.narratives = sp.narratives.map(n => n === oldName ? newName : n);
+    });
   });
-  if (!res.ok) { showToast('Fehler beim Umbenennen.'); return; }
-
-  annotations   = await fetch('/api/annotations').then(r => r.json());
+  saveAnnotations(annotations);
   narrativePool = narrativePool.map(n => n === oldName ? newName : n);
 
   for (let off = -2; off <= 2; off++) {
@@ -642,7 +649,7 @@ function addNarrative() {
 // ─────────────────────────────────────────────────────────
 // Speichern & Löschen
 // ─────────────────────────────────────────────────────────
-async function saveSpan() {
+function saveSpan() {
   if (!pendingSel) return;
 
   const inp = document.getElementById('newNarrativeInput');
@@ -655,55 +662,45 @@ async function saveSpan() {
   }
 
   const comment = document.getElementById('commentInput').value.trim();
-  const t = texts[currentIdx];
-  const payload = {
-    textId:     textId(currentIdx),
-    text:       t.text,
+  const t  = texts[currentIdx];
+  const tid = textId(currentIdx);
+
+  if (!annotations[tid]) annotations[tid] = { text: t.text, spans: [] };
+  annotations[tid].spans.push({
     span:       pendingSel.text,
     start:      pendingSel.start,
     end:        pendingSel.end,
     narratives: checked,
-    comment,
-  };
-
-  const res = await fetch('/api/annotations', {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload),
+    ...(comment ? { comment } : {}),
   });
+  saveAnnotations(annotations);
 
-  if (res.ok) {
-    annotations   = await fetch('/api/annotations').then(r => r.json());
-    narrativePool = collectNarratives(annotations);
-    applyHighlights(currentIdx);
-    renderChips(currentIdx);
-    updateStatus(currentIdx);
-    updateTextListBadges();
-    buildSidebar();
-    closePopup();
-    showToast('Annotation gespeichert');
-  } else {
-    showToast('Fehler beim Speichern.');
-  }
+  narrativePool = collectNarratives(annotations);
+  applyHighlights(currentIdx);
+  renderChips(currentIdx);
+  updateStatus(currentIdx);
+  updateTextListBadges();
+  buildSidebar();
+  closePopup();
+  showToast('Annotation gespeichert');
 }
 
-async function deleteSpan(textIdx, spanIdx) {
+function deleteSpan(textIdx, spanIdx) {
   hideSpanPopover();
-  const tid = encodeURIComponent(textId(textIdx));
-  const res = await fetch(`/api/annotations/${tid}/spans/${spanIdx}`, { method: 'DELETE' });
-  if (res.ok) {
-    annotations = await fetch('/api/annotations').then(r => r.json());
-    applyHighlights(textIdx);
-    renderChips(textIdx);
-    updateStatus(textIdx);
-    updateTextListBadges();
-    buildSidebar();
-    showToast('Annotation gelöscht');
-  }
+  const tid = textId(textIdx);
+  if (!annotations[tid]?.spans || annotations[tid].spans[spanIdx] === undefined) return;
+  annotations[tid].spans.splice(spanIdx, 1);
+  saveAnnotations(annotations);
+  applyHighlights(textIdx);
+  renderChips(textIdx);
+  updateStatus(textIdx);
+  updateTextListBadges();
+  buildSidebar();
+  showToast('Annotation gelöscht');
 }
 
 // ─────────────────────────────────────────────────────────
-// JSON Export
+// JSON Export / Import
 // ─────────────────────────────────────────────────────────
 function doExport() {
   const blob = new Blob([JSON.stringify(annotations, null, 2)], { type: 'application/json' });
@@ -713,6 +710,33 @@ function doExport() {
   a.click();
   URL.revokeObjectURL(a.href);
   showToast('JSON exportiert');
+}
+
+function doImport() {
+  document.getElementById('importFileInput').click();
+}
+
+function handleImportFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
+      annotations = data;
+      saveAnnotations(annotations);
+      narrativePool = collectNarratives(annotations);
+      redraw();
+      updateTextListBadges();
+      buildSidebar();
+      showToast('Annotationen importiert');
+    } catch {
+      showToast('Fehler: Ungültige JSON-Datei.');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -750,6 +774,8 @@ function bindListeners() {
 
   // Header
   document.getElementById('btnExport').addEventListener('click', doExport);
+  document.getElementById('btnImport').addEventListener('click', doImport);
+  document.getElementById('importFileInput').addEventListener('change', handleImportFile);
   document.getElementById('btnResume').addEventListener('click', resumeAnnotation);
 
   // Tastatur

@@ -1,0 +1,4 @@
+[build]
+  base    = "annotation-app"
+  publish = "public"
+  command = "echo 'No build step'"

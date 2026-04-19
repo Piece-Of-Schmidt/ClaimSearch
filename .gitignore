@@ -11,9 +11,7 @@ annotation-app/data/texts.json
 annotation-app/data/annotations.json
 annotation-app/data/annotations.json.bak
 
-# ── Stale Node.js artifacts (project uses Python) ───────
-annotation-app/server.js
-annotation-app/package.json
+# ── Node.js ──────────────────────────────────────────────
 annotation-app/package-lock.json
 annotation-app/node_modules/
 
